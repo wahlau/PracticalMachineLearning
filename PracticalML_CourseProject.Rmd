@@ -4,22 +4,13 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo=TRUE, fig.path='Figures/', fig.width=10, fig.height=4, cache=TRUE)
 ```
 
 ## Loading of needed libraries
 First load required libraries/variables/parameters needed for this project:
-```{r}
-library(ggplot2)
-library(lattice)
-library(caret)
-library(plyr)
-library(parallel)
-library(foreach)
-library(iterators)
-library(doParallel)
+```{r results = 'hide'}
 library(randomForest)
-knitr::opts_chunk$set(echo=TRUE, fig.path='Figures/', fig.width=10, fig.height=4, cache=TRUE)
 ```
 
 ## Preparing/getting the data
@@ -76,6 +67,12 @@ confusionMatrix(testing$classe, predictRF)
 
 accuracy <- postResample(predictRF, testing$classe)
 accuracy
-oose <- 1- as.numeric(confusionMatrix(testing$classe, predictRF)$overall[1])
-oose
+```
+
+## Prediction
+For the testing data set/validation, we can run the following:
+
+```{r}
+predTesting <- predict(modelRF, test_data)
+predTesting 
 ```

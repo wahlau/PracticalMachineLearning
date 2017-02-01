@@ -123,23 +123,7 @@ $(document).ready(function () {
 <div id="loading-of-needed-libraries" class="section level2">
 <h2>Loading of needed libraries</h2>
 <p>First load required libraries/variables/parameters needed for this project:</p>
-<pre class="r"><code>library(ggplot2)
-library(lattice)
-library(caret)
-library(plyr)
-library(parallel)
-library(foreach)
-library(iterators)
-library(doParallel)
-library(randomForest)</code></pre>
-<pre><code>## randomForest 4.6-12</code></pre>
-<pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
-<pre><code>## 
-## Attaching package: 'randomForest'</code></pre>
-<pre><code>## The following object is masked from 'package:ggplot2':
-## 
-##     margin</code></pre>
-<pre class="r"><code>knitr::opts_chunk$set(echo=TRUE, fig.path='Figures/', fig.width=10, fig.height=4, cache=TRUE)</code></pre>
+<pre class="r"><code>library(randomForest)</code></pre>
 </div>
 <div id="preparinggetting-the-data" class="section level2">
 <h2>Preparing/getting the data</h2>
@@ -241,9 +225,14 @@ confusionMatrix(testing$classe, predictRF)</code></pre>
 accuracy</code></pre>
 <pre><code>##  Accuracy     Kappa 
 ## 0.9915038 0.9892531</code></pre>
-<pre class="r"><code>oose &lt;- 1- as.numeric(confusionMatrix(testing$classe, predictRF)$overall[1])
-oose</code></pre>
-<pre><code>## [1] 0.008496177</code></pre>
+</div>
+<div id="prediction" class="section level2">
+<h2>Prediction</h2>
+<p>For the testing data set/validation, we can run the following:</p>
+<pre class="r"><code>predTesting &lt;- predict(modelRF, test_data)
+predTesting </code></pre>
+<pre><code>##  [1] B A B A A E D B A A B C B A E E A B B B
+## Levels: A B C D E</code></pre>
 </div>
 
 
