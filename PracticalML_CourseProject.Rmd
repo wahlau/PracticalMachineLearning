@@ -54,7 +54,6 @@ The cleaned training data can be partitioned into 2 parts - 70% of the data is t
 
 ```{r}
 set.seed(23232)
-ptm <- proc.time()
 inTrain <- createDataPartition(train_data$classe, p=0.70, list=F)
 training <- train_data[inTrain,]
 testing <- train_data[-inTrain,]
@@ -62,6 +61,7 @@ testing <- train_data[-inTrain,]
 controlRF <- trainControl(method="cv", 10)
 modelRF <- train(classe ~ ., data=training, method="rf", trControl=controlRF, ntree = 250)
 modelRF
+
 predictRF <- predict(modelRF, testing)
 confusionMatrix(testing$classe, predictRF)
 

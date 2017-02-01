@@ -162,7 +162,6 @@ te_dim &lt;- dim(test_data)</code></pre>
 <h2>Modeling the data</h2>
 <p>The cleaned training data can be partitioned into 2 parts - 70% of the data is the training data set, and the rest 30% will be used as the validation data set. Random Forest will be selected for the predictive model. We will use a 10-fold cross-validation technique to evaluate the algorithm.</p>
 <pre class="r"><code>set.seed(23232)
-ptm &lt;- proc.time()
 inTrain &lt;- createDataPartition(train_data$classe, p=0.70, list=F)
 training &lt;- train_data[inTrain,]
 testing &lt;- train_data[-inTrain,]
