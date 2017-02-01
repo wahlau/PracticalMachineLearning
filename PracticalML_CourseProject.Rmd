@@ -1,0 +1,81 @@
+---
+title: "Practical Machine Learning Course Project"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Loading of needed libraries
+First load required libraries/variables/parameters needed for this project:
+```{r}
+library(ggplot2)
+library(lattice)
+library(caret)
+library(plyr)
+library(parallel)
+library(foreach)
+library(iterators)
+library(doParallel)
+library(randomForest)
+knitr::opts_chunk$set(echo=TRUE, fig.path='Figures/', fig.width=10, fig.height=4, cache=TRUE)
+```
+
+## Preparing/getting the data
+First, check if the file "activity.zip" exists in the repository. If not, download it. Then unzip and load data into data frame `data`. 
+```{r}
+if(!file.exists("pml-training.csv")) {
+        download.file("https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv","pml-training.csv")
+}
+train_data <- read.csv("pml-training.csv")
+
+if(!file.exists("pml-testing.csv")) {
+        download.file("https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv","pml-testing.csv")
+}
+test_data <- read.csv("pml-testing.csv")
+tr_dim <- dim(train_data)
+te_dim <- dim(test_data)
+```
+The training data set has `r tr_dim[1]` observations and `r tr_dim[2]` variables. The testing data, on the other hand, has `r te_dim[1]` observations and `r te_dim[2]` variables.
+
+## Cleaning the data 
+Some cleaning has to be done to the data before a model can be built. Missing values should be removed. Also, columns that are not useful/contribute much to the accelerometer values can be removed.
+
+```{r}
+train_data <- train_data[, colSums(is.na(train_data)) == 0]
+test_data <- test_data[, colSums(is.na(test_data)) == 0]
+classe <- train_data$classe
+trainTemp <- grepl("^X|timestamp|window", names(train_data))
+train_data <- train_data[, !trainTemp]
+train_data <- train_data[, sapply(train_data, is.numeric)]
+train_data$classe <- classe
+testTemp <- grepl("^X|timestamp|window", names(test_data))
+test_data <- test_data[, !testTemp]
+test_data <- test_data[, sapply(test_data, is.numeric)]
+tr_dim <- dim(train_data)
+te_dim <- dim(test_data)
+```
+After cleaning, the training data set has `r tr_dim[1]` observations and `r tr_dim[2]` variables. The testing data now has `r te_dim[1]` observations and `r te_dim[2]` variables. "classe" is the outcome/label/class variable.
+
+## Modeling the data
+The cleaned training data can be partitioned into 2 parts - 70% of the data is the training data set, and the rest 30% will be used as the validation data set. Random Forest will be selected for the predictive model. We will use a 10-fold cross-validation technique to evaluate the algorithm.
+
+```{r}
+set.seed(23232)
+ptm <- proc.time()
+inTrain <- createDataPartition(train_data$classe, p=0.70, list=F)
+training <- train_data[inTrain,]
+testing <- train_data[-inTrain,]
+
+controlRF <- trainControl(method="cv", 10)
+modelRF <- train(classe ~ ., data=training, method="rf", trControl=controlRF, ntree = 250)
+modelRF
+predictRF <- predict(modelRF, testing)
+confusionMatrix(testing$classe, predictRF)
+
+accuracy <- postResample(predictRF, testing$classe)
+accuracy
+oose <- 1- as.numeric(confusionMatrix(testing$classe, predictRF)$overall[1])
+oose
+```
