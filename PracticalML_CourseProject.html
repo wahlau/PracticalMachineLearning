@@ -122,12 +122,12 @@ $(document).ready(function () {
 
 <div id="loading-of-needed-libraries" class="section level2">
 <h2>Loading of needed libraries</h2>
-<p>First load required libraries/variables/parameters needed for this project:</p>
+<p>First load randomForest library for this project:</p>
 <pre class="r"><code>library(randomForest)</code></pre>
 </div>
 <div id="preparinggetting-the-data" class="section level2">
 <h2>Preparing/getting the data</h2>
-<p>First, check if the file “activity.zip” exists in the repository. If not, download it. Then unzip and load data into data frame <code>data</code>.</p>
+<p>Check if the files (both training and test data) exists in the repository. If not, download it.</p>
 <pre class="r"><code>if(!file.exists(&quot;pml-training.csv&quot;)) {
         download.file(&quot;https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv&quot;,&quot;pml-training.csv&quot;)
 }
