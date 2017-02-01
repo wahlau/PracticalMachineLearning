@@ -224,6 +224,10 @@ confusionMatrix(testing$classe, predictRF)</code></pre>
 accuracy</code></pre>
 <pre><code>##  Accuracy     Kappa 
 ## 0.9915038 0.9892531</code></pre>
+<pre class="r"><code>oose &lt;- 1 - as.numeric(confusionMatrix(testing$classe, predictRF)$overall[1])
+oose</code></pre>
+<pre><code>## [1] 0.008496177</code></pre>
+<p>we observe that the accuracy is 99.15% and the estimated out-of-sample error is 0.84%.</p>
 </div>
 <div id="prediction" class="section level2">
 <h2>Prediction</h2>

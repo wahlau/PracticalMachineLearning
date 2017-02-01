@@ -67,7 +67,11 @@ confusionMatrix(testing$classe, predictRF)
 
 accuracy <- postResample(predictRF, testing$classe)
 accuracy
+
+oose <- 1 - as.numeric(confusionMatrix(testing$classe, predictRF)$overall[1])
+oose
 ```
+we observe that the accuracy is 99.15% and the estimated out-of-sample error is 0.84%.
 
 ## Prediction
 For the testing data set/validation, we can run the following:
